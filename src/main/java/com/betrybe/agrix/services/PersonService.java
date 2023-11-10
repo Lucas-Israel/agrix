@@ -1,7 +1,7 @@
 package com.betrybe.agrix.services;
 
-import com.betrybe.agrix.models.entity.Person;
 import com.betrybe.agrix.exceptions.PersonNotFoundException;
+import com.betrybe.agrix.models.entity.Person;
 import com.betrybe.agrix.models.repositories.PersonRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +37,6 @@ public class PersonService implements UserDetailsService {
 
     return person.get();
   }
-
-//  /**
-//   * Returns a person for a given username.
-//   */
-//  public Person getPersonByUsername(String username) {
-//    UserDetails person = personRepository.findByUsername(username);
-//
-//    if (person.isEmpty()) {
-//      throw new PersonNotFoundException();
-//    }
-//
-//    return person.get();
-//  }
 
   /**
    * Creates a new person.

@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * Security filter.
+ */
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
@@ -32,7 +35,7 @@ public class SecurityFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws ServletException, IOException {
     String token = recoveryToken(request);
 
-    if(token != null){
+    if (token != null) {
       String subject = tokenService.validateToken(token);
       UserDetails userDetails = personService.loadUserByUsername(subject);
 
@@ -46,7 +49,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
   private String recoveryToken(HttpServletRequest request) {
     String authHeader = request.getHeader("Authorization");
-    if(authHeader == null) return null;
+    if (authHeader == null) {
+      return null;
+    }
     return authHeader.replace("Bearer ", "");
   }
 }
