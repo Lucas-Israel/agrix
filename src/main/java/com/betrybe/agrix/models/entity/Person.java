@@ -72,11 +72,6 @@ public class Person implements UserDetails, GrantedAuthority {
     this.username = username;
   }
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of();
-  }
-
   public String getPassword() {
     return password;
   }
@@ -112,6 +107,12 @@ public class Person implements UserDetails, GrantedAuthority {
   @JsonIgnore
   public String getAuthority() {
     return this.getRole().toString();
+  }
+
+  @Override
+  @JsonIgnore
+  public Collection<Person> getAuthorities() {
+    return List.of(this);
   }
 }
 
