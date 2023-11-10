@@ -6,6 +6,7 @@ import com.betrybe.agrix.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +34,18 @@ public class PersonController {
    */
   @PostMapping
   public ResponseEntity<PersonDto> insertPerson(@RequestBody Person person) {
-    Person newPerson = personService.create(person);
-    PersonDto personDto = new PersonDto(newPerson.getId(), newPerson.getUsername(),
-        newPerson.getRole());
+    UserDetails userDetails = personService.loadUserByUsername(person.getUsername());
+    if (userDetails != null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    Person newPerson = new Person();
+    newPerson.setUsername(person.getUsername());
+    newPerson.setPassword(person.getPassword());
+    newPerson.setRole(person.getRole());
+    Person createdPerson = personService.create(newPerson);
+    PersonDto personDto = new PersonDto(
+        createdPerson.getId(), createdPerson.getUsername(), createdPerson.getRole()
+    );
     return ResponseEntity.status(HttpStatus.CREATED).body(personDto);
   }
 }

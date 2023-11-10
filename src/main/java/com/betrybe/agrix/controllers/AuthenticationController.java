@@ -1,8 +1,8 @@
 package com.betrybe.agrix.controllers;
 
 import com.betrybe.agrix.controllers.dto.AuthenticationDto;
+import com.betrybe.agrix.controllers.dto.TokenDto;
 import com.betrybe.agrix.models.entity.Person;
-import com.betrybe.agrix.services.PersonService;
 import com.betrybe.agrix.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody AuthenticationDto authenticationDto) {
+  public ResponseEntity<TokenDto> login(@RequestBody AuthenticationDto authenticationDto) {
     UsernamePasswordAuthenticationToken userPassword =
         new UsernamePasswordAuthenticationToken(
             authenticationDto.username(),
@@ -39,6 +39,7 @@ public class AuthenticationController {
     Authentication auth = authenticationManager.authenticate(userPassword);
     Person person = (Person) auth.getPrincipal();
     String token = tokenService.generateToken(person);
-    return ResponseEntity.ok(token);
+    TokenDto tokenDto = new TokenDto(token);
+    return ResponseEntity.ok(tokenDto);
   }
 }
